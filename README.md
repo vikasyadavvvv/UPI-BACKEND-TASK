@@ -52,10 +52,11 @@ As a backend developer, the goal of this project is to:
 1. Clone the repository:
 
 ```bash
-git clone
-cd
+git clone "https://github.com/vikasyadavvvv/UPI-BACKEND-TASK.git"
+cd UPI-BACKEND-TASK
 npm install
 cd src
 nodemon index.js
 git clone <your-repo-url>
 cd upi-backend
+```
