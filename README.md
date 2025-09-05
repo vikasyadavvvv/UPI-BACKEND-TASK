@@ -1,316 +1,211 @@
-# UPI App Backend
+# 🚀 UPI App Backend
 
-A backend service for a UPI-based transaction system, built for a Backend Developer Technical Assignment. This backend provides secure, RESTful APIs for user authentication, bank account management, UPI transactions, and transaction history.
-
-**Tech Stack:**  
-- Node.js (Express.js)  
-- PostgreSQL  
-- JWT (Authentication)  
-- bcrypt (Password Hashing)  
+A production-ready backend for a UPI-based transaction system, built as a technical assignment for backend developers. This backend delivers robust, secure RESTful APIs for **user authentication**, **bank account management**, **UPI transactions**, and **transaction history**.
 
 ---
 
-## 🚀 Features
+## 🛠️ Tech Stack
 
-### 1. Database Schema
-- **Normalized relational schema:**  
-  - Users  
-  - Bank Accounts  
-  - Transactions  
-- **Migrations & Seed Data:** Easily set up and seed your database.
-- **Performance:** Indexed tables for optimized queries.
-
-### 2. Authentication & Authorization
-- **JWT-based authentication:** Secure, stateless sessions.
-- **Password security:** Hashing with bcrypt.
-- **Role-based authorization:** Protected endpoints with middleware.
-
-### 3. UPI Transaction APIs
-- **Send Money:** Instantly transfer funds via UPI ID.
-- **Receive Money:** Request or accept payment.
-- **Transaction History:** Filter by date or status.
-- **Check Balance:** See all linked bank accounts and balances.
-- **Transaction Status:** Real-time status (Pending, Success, Failed).
-
-### 4. Security & Validations
-- **Input validation & sanitization:** All endpoints are validated.
-- **Rate limiting:** Throttle sensitive operations.
-- **Sensitive data handling:** Secure storage of UPI IDs and passwords.
+- **Node.js** (Express.js)
+- **PostgreSQL**
+- **JWT** (Authentication)
+- **bcrypt** (Password Hashing)
+- **Joi** (Validation)
+- **uuid** (Unique IDs)
 
 ---
 
-## 🛠️ Installation & Setup
+## ✨ Features
 
-1. **Clone the repository:**
-    ```bash
-    git clone "https://github.com/vikasyadavvvv/UPI-BACKEND-TASK.git"
-    cd UPI-BACKEND-TASK
-    npm install
-    cd src
-    nodemon index.js
-    ```
+### 🗄️ 1. Database Schema
+- **Normalized relational design**:  
+  - `Users`
+  - `Bank Accounts`
+  - `Transactions`
+- **Migrations & Seed Data**: Quick setup and test.
+- **Performance**: Indexed tables for fast lookups.
 
-2. **Configure Environment Variables:**  
-   Create a `.env` file in the `src` folder:
-    ```bash
-    PORT=4000
-    DATABASE_URL=your_postgres_connection_string
-    JWT_SECRET=your_secret
-    JWT_EXPIRES_IN=1h
-    SALT_ROUNDS=10
-    ```
+### 🔒 2. Authentication & Authorization
+- **JWT-based authentication**: Stateless, secure sessions.
+- **Strong password security**: Hashed with bcrypt.
+- **Role-based authorization**: API protection with middleware.
 
-3. **Database Setup:**  
-   - Ensure PostgreSQL is running.
-   - Run migrations and seeders (if provided).
+### 💸 3. UPI Transaction APIs
+- **Send Money**: Instantly transfer funds via UPI ID.
+- **Request/Receive Money**: Request or approve payments.
+- **Transaction History**: Filter by date or status.
+- **Check Balance**: See balances of all linked accounts.
+- **Real-time Status**: Transactions marked as Pending, Success, or Failed.
 
----
-### The Flow of backend 
-
-┌─────────────────────┐
-│   User Registration │
-├─────────────────────┤
-│ User submits:       │
-│ full_name, email,   │
-│ mobile, upi_id,     │
-│ password            │
-├─────────────────────┤
-│ Backend Actions:    │
-│ - Hash password     │
-│ - Generate UUID     │
-│ - created_at timestamp │
-│ - Validate unique email/mobile/UPI │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│      User Login     │
-├─────────────────────┤
-│ User provides:      │
-│ UPI ID / email / mobile + password │
-├─────────────────────┤
-│ Backend Actions:    │
-│ - Verify password   │
-│ - Issue JWT / session │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│ Adding Bank Account │
-├─────────────────────┤
-│ User provides:      │
-│ bank_name, account_number, IFSC │
-├─────────────────────┤
-│ Backend Actions:    │
-│ - Generate bank_account UUID │
-│ - Link to user_id   │
-│ - Set balance = 0   │
-└─────────┬───────────┘
-          │
-          ▼
-┌───────────────────────────────┐
-│       Make Transaction        │
-├───────────────────────────────┤
-│ User Action:                  │
-│ - from_account_id             │
-│ - to_account_id               │
-│ - amount                      │
-│ - type: SEND/REQUEST/RECEIVE  │
-│ - note (optional)             │
-├───────────────────────────────┤
-│ Backend Checks:               │
-│ - from_account balance (SEND) │
-│ - to_account exists           │
-├───────────────────────────────┤
-│ Transaction Flow:             │
-│ 1. Create transaction status=PENDING │
-│ 2. If checks pass:            │
-│    - Deduct from from_account │
-│    - Add to to_account        │
-│    - status = SUCCESS         │
-│ 3. If checks fail:            │
-│    - status = FAILED          │
-│ 4. REQUEST type:              │
-│    - Recipient receives request │
-│    - Recipient approves → SEND │
-│ 5. User can check transaction status │
-└─────────┬─────────────────────┘
-          │
-          ▼
-┌─────────────────────────────┐
-│     Transaction History     │
-├─────────────────────────────┤
-│ User can view all related   │
-│ transactions of their bank  │
-│ accounts                    │
-└─────────────────────────────┘
-
-
-## 🧪 API Usage & Postman Testing
-
-### 1️⃣ Register a User
-
-- **Endpoint:** `POST /api/auth/register`
-- **Request Body:**
-    ```json
-    {
-      "full_name": "Vikas Yadav",
-      "email": "vikas@example.com",
-      "mobile": "9876543210",
-      "upi_id": "vikas@upi",
-      "password": "123456"
-    }
-    ```
-- **Response:**
-    ```json
-    { "message": "User registered" }
-    ```
+### 🛡️ 4. Security & Validations
+- **Input validation & sanitization**: All endpoints protected.
+- **Rate limiting**: Prevents abuse on sensitive routes.
+- **Sensitive data handling**: Secure storage of UPI IDs and passwords.
 
 ---
+
+## ⚡ Quickstart
+
+#### 1. **Clone & Install**
+
+```bash
+git clone "https://github.com/vikasyadavvvv/UPI-BACKEND-TASK.git"
+cd UPI-BACKEND-TASK
+npm install
+cd src
+nodemon index.js
+```
+
+#### 2. **Environment Setup**
+
+Create a `.env` in the `src` folder:
+
+```bash
+PORT=4000
+DATABASE_URL=your_postgres_connection_string
+JWT_SECRET=your_secret
+JWT_EXPIRES_IN=1h
+SALT_ROUNDS=10
+```
+
+#### 3. **Database Setup**
+
+- Ensure **PostgreSQL** is running.
+- Run migrations and seeders (if provided).
+
+---
+
+## 🔁 Backend Flow Overview
+
+```mermaid
+flowchart TD
+    A[User Registration] --> B[User Login]
+    B --> C[Add Bank Account]
+    C --> D[Make Transaction]
+    D --> E[Transaction History]
+
+    subgraph Transaction
+        D1[Send/Request/Receive Money]
+        D2[Transaction Checks & Status]
+        D3[Balance Update]
+    end
+
+    D --> D1
+    D1 --> D2
+    D2 --> D3
+    D3 --> E
+```
+
+---
+
+## 🧪 API Usage & Examples
+
+### 1️⃣ Register User
+
+- **POST** `/api/auth/register`
+- **Body:**
+```json
+{
+  "full_name": "Vikas Yadav",
+  "email": "vikas@example.com",
+  "mobile": "9876543210",
+  "upi_id": "vikas@upi",
+  "password": "123456"
+}
+```
 
 ### 2️⃣ Login
 
-- **Endpoint:** `POST /api/auth/login`
-- **Request Body:**
-    ```json
-    {
-      "email": "vikas@example.com",
-      "password": "123456"
-    }
-    ```
-- **Response:**
-    ```json
-    { "token": "<JWT_TOKEN>" }
-    ```
-- Copy the token. For subsequent requests, add the following header:
-    ```
-    Authorization: Bearer <JWT_TOKEN>
-    ```
-
----
+- **POST** `/api/auth/login`
+- **Body:**
+```json
+{
+  "email": "vikas@example.com",
+  "password": "123456"
+}
+```
+- **Response:** `{ "token": "<JWT_TOKEN>" }`
+- Add header: `Authorization: Bearer <JWT_TOKEN>`
 
 ### 3️⃣ Add Bank Account
 
-- **Endpoint:** `POST /api/backacc/add`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
-- **Request Body:**
-    ```json
-    {
-      "bank_name": "BOB Bank",
-      "account_number": "908290825390",
-      "ifsc": "BOB0001234"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "account": {
-        "id": "23577dbc-6681-4176-ab44-b343a246384c",
-        "bank_name": "BOB Bank",
-        "account_number": "908290825390",
-        "balance": "0.00",
-        "created_at": "2025-09-05T15:25:26.950Z"
-      }
-    }
-    ```
-
----
+- **POST** `/api/backacc/add`
+- **Header:** `Authorization: Bearer <JWT_TOKEN>`
+- **Body:**
+```json
+{
+  "bank_name": "BOB Bank",
+  "account_number": "908290825390",
+  "ifsc": "BOB0001234"
+}
+```
 
 ### 4️⃣ Send Money
 
-- **Endpoint:** `POST /api/transactions/send`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
-- **Request Body:**
-    ```json
-    {
-      "to_upi": "friend@upi",
-      "amount": 1000,
-      "note": "Payment"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "message": "Transaction successful",
-      "txId": "<transaction_id>"
-    }
-    ```
-
----
+- **POST** `/api/transactions/send`
+- **Header:** `Authorization: Bearer <JWT_TOKEN>`
+- **Body:**
+```json
+{
+  "to_upi": "friend@upi",
+  "amount": 1000,
+  "note": "Payment"
+}
+```
 
 ### 5️⃣ Request Payment
 
-- **Endpoint:** `POST /api/transactions/request`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
-- **Request Body:**
-    ```json
-    {
-      "from_upi": "friend@upi",
-      "amount": 500,
-      "note": "Dinner share"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "message": "Request sent",
-      "txId": "<request_id>"
-    }
-    ```
-
----
+- **POST** `/api/transactions/request`
+- **Header:** `Authorization: Bearer <JWT_TOKEN>`
+- **Body:**
+```json
+{
+  "from_upi": "friend@upi",
+  "amount": 500,
+  "note": "Dinner share"
+}
+```
 
 ### 6️⃣ Respond to Payment Request
 
-- **Endpoint:** `POST /api/transactions/respond/<request_id>`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
-- **Request Body:**
-    ```json
-    {
-      "action": "ACCEPT" // or "REJECT"
-    }
-    ```
-- **Response (Accepted):**
-    ```json
-    { "message": "Request accepted" }
-    ```
-- **Response (Rejected):**
-    ```json
-    { "message": "Request rejected" }
-    ```
+- **POST** `/api/transactions/respond/<request_id>`
+- **Header:** `Authorization: Bearer <JWT_TOKEN>`
+- **Body:**  
+  `{ "action": "ACCEPT" }`  or  `{ "action": "REJECT" }`
+
+### 7️⃣ Transaction History, Balance, Status
+
+- **GET** `/api/transactions/history`
+- **GET** `/api/transactions/balance`
+- **GET** `/api/transactions/status/<txId>`
 
 ---
 
-### 7️⃣ Transaction History, Balance, and Status
+## 📑 Postman Collection
 
-- **Get Transaction History:**  
-  `GET /api/transactions/history`
-- **Check Account Balance:**  
-  `GET /api/transactions/balance`
-- **Check Transaction Status:**  
-  `GET /api/transactions/status/<txId>`
+- Import these endpoints into Postman.
+- Set `Authorization` header after login for all protected APIs.
 
 ---
 
-## 📑 Example Postman Collection
+## 📁 Project Structure
 
-- Import the endpoints above into Postman for easy testing.
-- Set `Authorization` header after login to access protected APIs.
+<img width="411" height="452" alt="image" src="https://github.com/user-attachments/assets/58edada1-695c-4a6b-b058-d2580acc0390" />
+
 
 ---
 
-## 🏗️ Project Structure
-<img width="411" height="452" alt="image" src="https://github.com/user-attachments/assets/5ef44d04-1caf-4dfe-b0fc-14172b1ca699" />
+## 🏆 Best Practices
 
-
-## 🛡️ Best Practices Followed
-
-- Clean and modular codebase with separation of concerns.
-- Production-ready error handling and input validation.
-- Secure credential and sensitive data storage.
-- Follows RESTful API conventions.
+- **Clean, modular codebase**: Separation of controllers, services, middlewares.
+- **Production-grade error handling** & **input validation**.
+- **Secure storage** of credentials and sensitive data.
+- **RESTful API conventions**.
 
 ---
 
+## 🧑‍💻 Author
 
-[Vikas Yadav](https://github.com/vikasyadavvvv)
+**[Vikas Yadav](https://github.com/vikasyadavvvv)**
+
+---
