@@ -1,7 +1,5 @@
 # 🚀 UPI App Backend
 
-A production-ready backend for a UPI-based transaction system, built as a technical assignment for backend developers. This backend delivers robust, secure RESTful APIs for **user authentication**, **bank account management**, **UPI transactions**, and **transaction history**.
-
 ---
 
 ## 🛠️ Tech Stack
